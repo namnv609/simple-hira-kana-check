@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Japanese Checker</title>
+  <style>
+    [contenteditable] {
+      width: 99.5%;
+      height: 300px;
+      font-size: 24px;
+      padding: 4px;
+      max-width: 99.5%;
+      border: 1px solid #000;
+      font-family: monospace;
+    }
+
+    button#check {
+      padding: 4px 20px;
+      margin: 10px 0 0;
+    }
+
+    ins {
+      background-color: #c6ffc6;
+      text-decoration: none;
+    }
+
+    del {
+      background-color: #ffc6c6;
+      text-decoration: none;
+    }
+
+    #original-text {
+      width: 0;
+      height: 0;
+      visibility: hidden;
+    }
+  </style>
+  <script src="jquery-3.7.1.min.js"></script>
+  <script src="diff_match_patch.js"></script>
+  <script src="jquery.pretty-text-diff.js"></script>
+  <script>
+    $(function() {
+      $("#check").on("click", function() {
+        checkText();
+      });
+
+      $("#your-text").on("keydown", function(e) {
+        if (e.keyCode == 13 && e.shiftKey) {
+          e.preventDefault();
+
+          checkText();
+        }
+      })
+
+      $("#dis-original-text").on("input", function(e) {
+        var pastedContent = $(this).text().replaceAll(" ", "").trim();
+        $("#original-text").val(pastedContent);
+      })
+
+      function checkText() {
+        var originalText = $("#original-text").val().replaceAll(" ", "").trim();
+        var yourText = $("#your-text").text().trim();
+
+        if (!originalText || !yourText) {
+          return;
+        }
+
+        $("body").prettyTextDiff({
+          cleanup: true,
+          originalContent: originalText,
+          changedContent: yourText,
+          diffContainer: "#dis-original-text"
+        })
+      }
+    });
+  </script>
+</head>
+<body>
+  Original text
+  <div id="dis-original-text" contenteditable="true"></div>
+  Your text
+  <div id="your-text" contenteditable="true"></div>
+  <p id="diff-content"></p>
+  <button id="check">Check</button>
+  <textarea id="original-text"></textarea>
+</body>
+</html>
