@@ -30,6 +30,10 @@
       text-decoration: none;
     }
 
+    #is-auto-check {
+      margin: 10px 5px 5px 0;
+    }
+
     #original-text {
       width: 0;
       height: 0;
@@ -45,10 +49,15 @@
         checkText();
       });
 
-      $("#your-text").on("keydown", function(e) {
+      $("#your-text").on("input keydown keyup", function(e) {
+        var isAutoCheck = $("#is-auto-check").is(":checked");
+
+        if (isAutoCheck) {
+          return checkText();
+        }
+
         if (e.keyCode == 13 && e.shiftKey) {
           e.preventDefault();
-
           checkText();
         }
       })
@@ -81,6 +90,10 @@
   <div id="dis-original-text" contenteditable="true"></div>
   Your text
   <div id="your-text" contenteditable="true"></div>
+  <div>
+    <input type="checkbox" name="" id="is-auto-check" checked="checked">
+    <label for="is-auto-check">Is auto check (on typing)</label>
+  </div>
   <p id="diff-content"></p>
   <button id="check">Check</button>
   <textarea id="original-text"></textarea>
