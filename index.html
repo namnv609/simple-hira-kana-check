@@ -49,16 +49,11 @@
         checkText();
       });
 
-      $("#your-text").on("input keydown keyup", function(e) {
+      $("#your-text").on("input", function(e) {
         var isAutoCheck = $("#is-auto-check").is(":checked");
 
         if (isAutoCheck) {
           return checkText();
-        }
-
-        if (e.keyCode == 13 && e.shiftKey) {
-          e.preventDefault();
-          checkText();
         }
       })
 
